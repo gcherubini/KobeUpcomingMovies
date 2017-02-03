@@ -5,6 +5,7 @@ There is a background task that is responsible to synchronize upcoming movies fr
 
 There is a view restoration code implemented using Android Shared Preferences storage, this way if user left the movies view for some reason, the context of this view will be restored properly when the user comes back to application. There is also a pagination feature implemented in order to facilitate the visualization of the whole results shown.
 
+To install the application you can download the application file that is placed in root of GitHub, the file is called: 'KobeMovies.apk'. Or, you can just clone the repository, build and run in your own Android Studio.
 
 Android libraries used:
 
