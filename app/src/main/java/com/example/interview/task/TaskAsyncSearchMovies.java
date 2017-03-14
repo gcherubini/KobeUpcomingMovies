@@ -12,6 +12,7 @@ import com.example.interview.task.TaskAsyncSearchMovies.TaskAsyncSearchMoviesRes
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -46,7 +47,12 @@ public class TaskAsyncSearchMovies extends TaskListenableAsync<Void, Void, TaskA
 			Response<UpcomingMoviesResult> response = call.execute();
 			if(response.isSuccessful() && response.body() != null) {
 				NetworkApiTheMovieDb.UpcomingMoviesResult body = response.body();
-				movies  = body.getResults();
+				movies = body.getResults();
+				if (movies == null || movies.size() == 0) throw new Exception("No movies found, empty result.");
+
+				for(ModelMovie m : movies){
+					ModelMovie.updateMovieModelWithGenresString(ctx, m, TAG, Realm.getDefaultInstance());
+				}
 				StorageSharedPrefs.getInstance(ctx).setMoviesTotalPages(Integer.parseInt(body.getTotalPages()));
 				Log.i(TAG, "Success to search movies from Network");
 			}

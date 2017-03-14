@@ -24,11 +24,10 @@ import com.example.interview.task.TaskListenableAsync;
 import com.example.interview.utils.NetworkUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.example.interview.R.layout.movies;
 
@@ -62,7 +61,6 @@ public class ActivityMovies extends AppCompatActivity implements SearchView.OnQu
 
         setTitle(R.string.activity_movie_name);
 
-        Realm.init(getApplicationContext());
         realm = Realm.getDefaultInstance();
         prefs = StorageSharedPrefs.getInstance(this);
 
@@ -94,14 +92,17 @@ public class ActivityMovies extends AppCompatActivity implements SearchView.OnQu
      * Prepare Realm change listener to update UI when local database is updated
      * */
     private void loadDataFromDatabase() {
-        moviesDBResults = realm.where(ModelMovie.class).equalTo("page", prefs.getMoviesCurrentPage()).findAll();
+        moviesDBResults = realm.where(ModelMovie.class)
+                .between("position",
+                        ModelMovie.getFirstPositionForSpecificPage(prefs.getMoviesCurrentPage()),
+                        ModelMovie.getLastPositionForSpecificPage(prefs.getMoviesCurrentPage()))
+                .findAllSorted("position", Sort.ASCENDING);
         adapter.setDataSet(moviesDBResults);
         adapter.notifyDataSetChanged();
         updatePaginationElements();
     }
 
     /** Pagination buttons */
-
     public void nextPageBtnClick(View view) {
         loadMoviesFromNetwork(prefs.getMoviesCurrentPage() + 1);
     }
@@ -152,7 +153,7 @@ public class ActivityMovies extends AppCompatActivity implements SearchView.OnQu
      * Process failures from AsyncTasks and show user feedback
      * */
     private void processFailure(String errorMessage) {
-		Log.e(TAG, "Failed to sync database with movies from Network. err:" + errorMessage);
+		Log.e(TAG, "Failed to load movies from Network. err:" + errorMessage);
 		if(NetworkUtils.hasInternetConnection(this)){
 			Toast.makeText(this, R.string.movies_sync_error_generic, Toast.LENGTH_SHORT).show();
 		}

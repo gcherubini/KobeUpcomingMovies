@@ -45,6 +45,7 @@ public class AdapterMovieItem extends RecyclerView.Adapter<AdapterMovieItem.Item
             @Override
             public void onClick(View v) {
                Intent intent = new Intent(ctx, ActivityMovieDetails.class);
+               intent.putExtra("movieGenres", modelMovie.getGenres());
                intent.putExtra("movieTitle", modelMovie.getTitle());
                intent.putExtra("movieOverview", modelMovie.getOverview());
                intent.putExtra("movieImage", modelMovie.getPosterPath());

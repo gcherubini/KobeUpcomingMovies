@@ -1,5 +1,6 @@
 package com.example.interview.network;
 
+import com.example.interview.model.ModelGenre;
 import com.example.interview.model.ModelMovie;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -20,7 +21,9 @@ public class NetworkApiTheMovieDb {
     public static final String API_IMG_URL = "https://image.tmdb.org/t/p/w185%s";
     public static final String API_KEY = "c5850ed73901b8d268d0898a8a9d8bff";
     static final String MOVIES_UPCOMING_ENDPOINT = "movie/upcoming";
+    static final String MOVIES_GENRES_LIST = "genre/movie/list";
     static final String MOVIES_SEARCH = "search/movie";
+
     private static TheMovieDbNetworkApiInterface client;
 
     public interface TheMovieDbNetworkApiInterface {
@@ -43,6 +46,13 @@ public class NetworkApiTheMovieDb {
         Call<UpcomingMoviesResult> searchMovies(@Query("api_key") String apiKey,
                                                 @Query("query") String query,
                                                 @Query("page") int page);
+
+        /**
+         * Get TheMovieDB genres list
+         * @param apiKey theMovieDB api key
+         * */
+        @GET(MOVIES_GENRES_LIST)
+        Call<GenresListResult> getGenresList(@Query("api_key") String apiKey);
     }
 
     /**
@@ -86,6 +96,20 @@ public class NetworkApiTheMovieDb {
 
         public String getTotalResults() {
             return total_results;
+        }
+    }
+
+    // Response bodies
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class GenresListResult {
+        List<ModelGenre> genres;
+
+        public List<ModelGenre> getGenres() {
+            return genres;
+        }
+
+        public void setGenres(List<ModelGenre> genres) {
+            this.genres = genres;
         }
     }
 }

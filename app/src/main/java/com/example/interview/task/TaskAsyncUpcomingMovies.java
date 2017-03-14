@@ -1,16 +1,13 @@
 package com.example.interview.task;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.interview.R;
 import com.example.interview.model.ModelMovie;
 import com.example.interview.network.NetworkApiTheMovieDb;
 import com.example.interview.network.NetworkApiTheMovieDb.UpcomingMoviesResult;
 import com.example.interview.storage.StorageSharedPrefs;
-import com.example.interview.utils.NetworkUtils;
 
 import java.util.List;
 
@@ -44,10 +41,11 @@ public class TaskAsyncUpcomingMovies extends TaskListenableAsync<Void, Void, Str
 			Response<UpcomingMoviesResult> response = call.execute();
 			if(response.isSuccessful() && response.body() != null) {
 				Log.i(TAG, "Success to get movies from Network");
-				NetworkApiTheMovieDb.UpcomingMoviesResult body =  response.body();
+				NetworkApiTheMovieDb.UpcomingMoviesResult body = response.body();
 				List<ModelMovie> movies = body.getResults();
+				if (movies == null || movies.size() == 0) throw new Exception("No movies found, empty result.");
 
-				failure = databasePersistence(pageToLoad, failure, body, movies);
+				failure = databasePersistence(failure, body, movies);
 			}
 			else{
 				failure =  response.errorBody().toString();
@@ -60,12 +58,20 @@ public class TaskAsyncUpcomingMovies extends TaskListenableAsync<Void, Void, Str
 		return failure;
 	}
 
-	private String databasePersistence(int page, String failure, UpcomingMoviesResult body, List<ModelMovie> movies) {
+    /**
+     * Persisting movies into local database
+	 * If the movie position already exists, another movie will be replaced in this position
+     */
+	private String databasePersistence(String failure, UpcomingMoviesResult body, List<ModelMovie> movies) {
 		try{
 			Realm realm = Realm.getDefaultInstance();
 			realm.beginTransaction();
+
+			int position = ModelMovie.getFirstPositionForSpecificPage(pageToLoad);
 			for(ModelMovie m : movies){
-				m.setPage(page);
+				m.setPosition(position);
+                ModelMovie.updateMovieModelWithGenresString(ctx, m, TAG, realm);
+                position++;
 			}
 			realm.copyToRealmOrUpdate(movies);
 			realm.commitTransaction();

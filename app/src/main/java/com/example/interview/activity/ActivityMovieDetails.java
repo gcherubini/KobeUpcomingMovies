@@ -28,6 +28,8 @@ public class ActivityMovieDetails extends AppCompatActivity {
     private TextView movieOverviewTextView;
     private TextView moviePopularityTextView;
     private TextView movieReleaseDateTextView;
+    private TextView movieGenresTextView;
+    private String extraMovieGenres;
 
 
     @Override
@@ -37,6 +39,7 @@ public class ActivityMovieDetails extends AppCompatActivity {
 
         // Load extra params
         Intent myIntent = getIntent();
+        extraMovieGenres = myIntent.getStringExtra("movieGenres");
         extraMovieTitle = myIntent.getStringExtra("movieTitle");
         extraMovieOverview = myIntent.getStringExtra("movieOverview");
         extraMovieImage = myIntent.getStringExtra("movieImage");
@@ -49,6 +52,7 @@ public class ActivityMovieDetails extends AppCompatActivity {
         moviePopularityTextView =  (TextView) findViewById(R.id.movie_details_popularity);
         movieReleaseDateTextView =  (TextView) findViewById(R.id.movie_details_release_date);
         movieOverviewTextView =  (TextView) findViewById(R.id.movie_details_overview);
+        movieGenresTextView =  (TextView) findViewById(R.id.movie_details_genres);
         movieImage =  (ImageView) findViewById(R.id.movie_details_image);
     }
 
@@ -75,6 +79,7 @@ public class ActivityMovieDetails extends AppCompatActivity {
         moviePopularityTextView.setText("Popularity: " + extraMoviePopularity);
         movieOverviewTextView.setText(extraMovieOverview);
         movieReleaseDateTextView.setText(extraMovieReleaseDate);
+        movieGenresTextView.setText(extraMovieGenres);
         String imageUrl = String.format(NetworkApiTheMovieDb.API_IMG_URL, extraMovieImage);
         Picasso.with(this).load(imageUrl).into(movieImage);
     }
