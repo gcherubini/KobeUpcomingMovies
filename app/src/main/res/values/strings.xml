@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Kobe Movies</string>
+    <string name="activity_movie_name"> Upcoming Movies </string>
+
+    <string name="movies_menu_search_text"> Type to search... </string>
+    <string name="movies_activity_text_next_page"> Next </string>
+    <string name="movies_activity_text_previous_page"> Previous </string>
+
+    <string name="movies_sync_error_database"> Oops... Failed to persist movies into local database </string>
+    <string name="movies_sync_error_generic"> Oops...  Failed to get movies from Network </string>
+    <string name="movies_search_error_generic"> Oops... Failed to find movies from Network </string>
+    <string name="movies_sync_error_no_internet_connection"> Failed to get movies from Network, please check your internet connection </string>
+    <string name="movies_search_error_no_internet_connection"> Failed to find movies from Network, please check your internet connection </string>
+    <string name="movies_sync_successfully"> Upcoming movies list updated </string>
+    <string name="movies_search_successfully"> Movies list updated </string>
+
+    <string name="genres_sync_error_database"> Oops... Failed to persist genres into local database </string>
+
+</resources>
