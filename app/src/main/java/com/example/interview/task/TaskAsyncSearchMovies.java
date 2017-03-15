@@ -53,7 +53,7 @@ public class TaskAsyncSearchMovies extends TaskListenableAsync<Void, Void, TaskA
 				for(ModelMovie m : movies){
 					ModelMovie.updateMovieModelWithGenresString(ctx, m, TAG, Realm.getDefaultInstance());
 				}
-				StorageSharedPrefs.getInstance(ctx).setMoviesTotalPages(Integer.parseInt(body.getTotalPages()));
+				StorageSharedPrefs.getInstance(ctx).setMoviesTotalPages(body.getTotalPages());
 				Log.i(TAG, "Success to search movies from Network");
 			}
 			else{

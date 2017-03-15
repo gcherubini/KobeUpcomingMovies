@@ -3,6 +3,7 @@ package com.example.interview.network;
 import com.example.interview.model.ModelGenre;
 import com.example.interview.model.ModelMovie;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -76,8 +77,10 @@ public class NetworkApiTheMovieDb {
   	@JsonIgnoreProperties(ignoreUnknown = true)
   	public static class UpcomingMoviesResult {
         String page;
-        String total_pages;
-        String total_results;
+        @JsonProperty("total_pages")
+        Integer totalPages;
+        @JsonProperty("total_results")
+        Integer totalResults;
         List<ModelMovie> results;
 
         public UpcomingMoviesResult() {}
@@ -90,12 +93,12 @@ public class NetworkApiTheMovieDb {
             return page;
         }
 
-        public String getTotalPages() {
-            return total_pages;
+        public Integer getTotalPages() {
+            return totalPages;
         }
 
-        public String getTotalResults() {
-            return total_results;
+        public Integer getTotalResults() {
+            return totalResults;
         }
     }
 

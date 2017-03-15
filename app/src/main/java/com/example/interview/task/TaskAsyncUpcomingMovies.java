@@ -76,11 +76,11 @@ public class TaskAsyncUpcomingMovies extends TaskListenableAsync<Void, Void, Str
 			realm.copyToRealmOrUpdate(movies);
 			realm.commitTransaction();
 
+			StorageSharedPrefs.getInstance(ctx).setMoviesTotalPages(body.getTotalPages());
 			Log.i(TAG, "Database synced successfully, movies table updated");
-			StorageSharedPrefs.getInstance(ctx).setMoviesTotalPages(Integer.parseInt(body.getTotalPages()));
 		}
 		catch (Exception ex){
-			failure = ctx.getString(R.string.movies_sync_error_database);
+			failure = ctx.getString(R.string.movies_sync_error_database) + " Exc: " + ex.getMessage();
 		}
 		return failure;
 	}
